@@ -4,15 +4,16 @@ const io= require('socket.io')(3000,{
     },
 })
 io.on('connection', (socket)=>{
-    const id=socket.id;
+    let id=socket.id;
 console.log(`client connected with socketid: ${socket.id}`)
 socket.broadcast.emit('response','joined the chat',socket.id);
 
-socket.on('sending',(msg)=>{
-    socket.broadcast.emit('response',msg,socket.id);
+socket.on('sending',(msg,name)=>{
+    id=name?name:socket.id
+    socket.broadcast.emit('response',msg,name?name:socket.id);
 })
 socket.on('disconnect',()=>{
-    io.emit('leave','Client disconnected',id)
+    io.emit('leave','is disconnected',id)
 })
 })
 
