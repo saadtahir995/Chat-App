@@ -48,10 +48,7 @@ export default function App() {
               >
                 <span>{msg.socketId}:</span> {msg.message}
               </div>
-            </div>
-            
-            
-}
+            </div>}
               </>
             ))}
           
