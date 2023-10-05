@@ -69,4 +69,8 @@ body {
     padding: 5px;
     font-size: larger;
   }
+  .name button{
+    padding: 7px;
+    margin-left: 1%;
+  }
   
