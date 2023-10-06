@@ -11,6 +11,8 @@ export default function App() {
   const [room,setRoom]=useState('');
   const[err,setErr] = useState('');
   const [isjoined,setIsjoined]=useState(false);
+  const [showstatus,setShowstatus]=useState(false);
+  const [roomname,setRoomname]=useState('');
 
   const sendMsg = () => {
     socket.emit("sending", msg, name,room);
@@ -26,6 +28,10 @@ export default function App() {
     id===socket.id&&(id=name?name:'Me')
       setMsgs((prevmsgs) => [...prevmsgs, { message: msg, socketId: id,main:mainid }])
   });
+  socket.on("join_response", (msg, id,roomname) =>{
+    setRoomname(roomname)
+      setMsgs((prevmsgs) => [...prevmsgs, { message: msg, socketId: id,main:id }])
+  });
   }, []);
  const Handleroom=()=>{
   setIsjoined(true)
@@ -37,6 +43,11 @@ const HandleLeave=()=>{
   socket.emit("room_leave",room,name)
   setMsgs([{}]);
   setRoom('')
+}
+const HandleCreate=()=>{
+  setIsjoined(true);
+  socket.emit("room_create",room,roomname,name)
+  setMsgs([{}]);
 }
   return (
     <div className="container">
@@ -53,20 +64,32 @@ const HandleLeave=()=>{
       </div>
       {err}
       <div className="name">
+        {!showstatus&&<>
         <input
           type="text"
           name="room"
           id="room"
           onChange={(e) => setRoom(e.target.value)}
           value={room}
-          placeholder="Enter room code....."
+          placeholder="Join a room....."
         />
-        {room&&(<><button onClick={Handleroom} style={{backgroundColor:'#baffba'}}>Join</button></>)}{isjoined&&(<><button onClick={HandleLeave} style={{backgroundColor:'#ff7e7e'}}>Leave</button></>)}
+        <b> OR </b>
+        </>}
+        {room&&(<> {!showstatus && !isjoined ?<button onClick={Handleroom} style={{backgroundColor:'#baffba'}}>Join</button>:null}</>)}{isjoined&&(<><button onClick={HandleLeave} style={{backgroundColor:'#ff7e7e'}}>Leave</button></>)}
+
+      <button onClick={()=>setShowstatus(!showstatus)}>Create a Room</button>
+      <br /> <br />
+      {showstatus&&<><input type="text" name="name" className="name" placeholder="Enter Group name" value={roomname} onChange={(e)=>(setRoomname(e.target.value))} />
+      <br />
+      <input type="text" className="name" placeholder="Enter code of your Room"s value={room} onChange={(e)=>setRoom(e.target.value)} />
+      {room&&roomname?<button onClick={HandleCreate}>Create</button>:null}
+      </>}
       </div>
+
       
 
       <div className="chat-box">
-        {isjoined?<><h3>Private Room</h3></>:<><h3>Public Chat</h3></>}
+        {isjoined?<><h3>{roomname}</h3></>:<><h3>Public Chat</h3></>}
         {msgs.map((msg, index) => (
           <>
             {msg.socketId && (
