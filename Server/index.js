@@ -29,10 +29,12 @@ socket.on('room_create',(roomcode,roomname,name)=>{
 })
 socket.on('room_join',(roomcode,name)=>{
     const room= rooms.filter((room)=>room.code===roomcode)
-    if(room.length===0){return}
+    if(room.length===0){return socket.emit('err_room','Room Not found')}
+    else{
     socket.leave(0);
     socket.join(roomcode)
     io.to(roomcode).emit('join_response',name?name+' joins room':socket.id +' joins room','Alert',room[0].name)
+    }
     
 })
 socket.on('room_leave',(room,name)=>{
