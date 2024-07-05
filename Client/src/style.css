@@ -83,4 +83,56 @@ body {
   
 
   }
+  .container {
+    width: 60%;
+    margin: auto;
+  }
+  
+  .name {
+    margin-bottom: 20px;
+  }
+  
+  .err-box {
+    color: red;
+    margin-bottom: 20px;
+  }
+  
+  .chat-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: scroll;
+    margin-bottom: 20px;
+  }
+  
+  .chat-message {
+    margin-bottom: 10px;
+  }
+  
+  .message-content {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 15px;
+  }
+  
+  .input-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  input[type="text"] {
+    flex: 1;
+    margin-right: 10px;
+  }
+  
+  button {
+    padding: 5px 10px;
+  }
+  
+  .ai-chat-box {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
   

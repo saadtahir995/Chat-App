@@ -3,6 +3,18 @@ const io= require('socket.io')(3000,{
     origin:['http://localhost:5173'],
     },
 })
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+const ChatRoute = require( './Routes/chatapi.js')
+app.use('/api/route',ChatRoute)
+app.listen(5173,()=>{
+    console.log('listening on port 5173')
+    
+})
 let rooms=[
     {name:'',code:''}
 ]

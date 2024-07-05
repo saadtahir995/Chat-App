@@ -14,10 +14,35 @@ export default function App() {
   const [showstatus, setShowstatus] = useState(false);
   const [roomname, setRoomname] = useState("");
 
+  const [aiMsg, setAiMsg] = useState("");
+  const [aiMsgs, setAiMsgs] = useState([]);
+
   const sendMsg = () => {
     socket.emit("sending", msg, name, room);
     setMsg("");
   };
+
+  const sendAiMsg = () => {
+    // Replace this with your actual AI endpoint logic
+    fetch(`http://localhost:3000/api/chat/prompt`)
+      .then((response) => response.json())
+      .then((data) => {
+        setAiMsgs((prevMsgs) => [
+          ...prevMsgs,
+          { message: aiMsg, from: "Me" },
+        ]);
+        setAiMsgs((prevMsgs) => [
+          ...prevMsgs,
+          { message: data.message, from: "AI" },
+        ]);
+      })
+      .catch((error) => console.error(error));
+    const aiResponse = `AI Response to: ${aiMsg}`;
+    //setAiMsgs((prevMsgs) => [...prevMsgs, { message: aiMsg, from: "Me" }]);
+    //setAiMsgs((prevMsgs) => [...prevMsgs, { message: aiResponse, from: "AI" }]);
+    setAiMsg("");
+  };
+
   useEffect(() => {
     if (
       name.toLowerCase().includes("alert") ||
@@ -39,7 +64,7 @@ export default function App() {
     });
     socket.on("join_response", (msg, id, roomname) => {
       setIsjoined(true);
-    setMsgs([{}]);
+      setMsgs([{}]);
       setRoomname(roomname);
       setMsgs((prevmsgs) => [
         ...prevmsgs,
@@ -48,26 +73,29 @@ export default function App() {
     });
     socket.on("err_room", (msg) => {
       setIsjoined(false);
-      setRoom('')
+      setRoom("");
       setErr(msg);
       setTimeout(() => setErr(""), 3000);
     });
   }, []);
+
   const Handleroom = () => {
     socket.emit("room_join", room, name);
-    
   };
+
   const HandleLeave = () => {
     setIsjoined(false);
     socket.emit("room_leave", room, name);
     setMsgs([{}]);
     setRoom("");
   };
+
   const HandleCreate = () => {
     setIsjoined(true);
     socket.emit("room_create", room, roomname, name);
     setMsgs([{}]);
   };
+
   return (
     <div className="container">
       <h3>Chat App</h3>
@@ -197,6 +225,7 @@ export default function App() {
           </>
         ))}
       </div>
+
       <div className="input-container">
         <input
           type="text"
@@ -210,6 +239,41 @@ export default function App() {
             <button onClick={sendMsg}>Send</button>
           </>
         )}
+      </div>
+
+      <div className="ai-chat-box">
+        <h3>Chat with AI</h3>
+        <div className="chat-box">
+          {aiMsgs.map((msg, index) => (
+            <div
+              key={index}
+              className="chat-message"
+              style={{ textAlign: msg.from === "Me" ? "right" : "left" }}
+            >
+              <div
+                className="message-content"
+                style={{
+                  backgroundColor: msg.from === "Me" ? "#e9e5e5" : "#baffba",
+                  borderRadius: "50px",
+                  padding: "3.7px",
+                  display: "inline-block",
+                }}
+              >
+                <span>{msg.from}:</span> {msg.message}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="input-container">
+          <input
+            type="text"
+            name="aiMsg"
+            id="aiMsg"
+            value={aiMsg}
+            onChange={(e) => setAiMsg(e.target.value)}
+          />
+          <button onClick={sendAiMsg}>Send to AI</button>
+        </div>
       </div>
     </div>
   );
