@@ -16,6 +16,7 @@ export default function App() {
 
   const [aiMsg, setAiMsg] = useState("");
   const [aiMsgs, setAiMsgs] = useState([]);
+  const [aiLoading, setAiLoading] = useState(false); // State for loading indicator
 
   const sendMsg = () => {
     socket.emit("sending", msg, name, room);
@@ -23,23 +24,32 @@ export default function App() {
   };
 
   const sendAiMsg = () => {
+    setAiLoading(true); // Activate loading indicator
+
+    setAiMsgs((prevMsgs) => [
+      ...prevMsgs,
+      { message: aiMsg, from: "Me" },
+    ]);
     // Replace this with your actual AI endpoint logic
-    fetch(`http://localhost:3000/api/chat/prompt`)
+    fetch(`http://localhost:5174/api/route/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message: aiMsg }),
+    })
       .then((response) => response.json())
       .then((data) => {
         setAiMsgs((prevMsgs) => [
           ...prevMsgs,
-          { message: aiMsg, from: "Me" },
-        ]);
-        setAiMsgs((prevMsgs) => [
-          ...prevMsgs,
-          { message: data.message, from: "AI" },
+          { message: data.text, from: "AI" },
         ]);
       })
-      .catch((error) => console.error(error));
-    const aiResponse = `AI Response to: ${aiMsg}`;
-    //setAiMsgs((prevMsgs) => [...prevMsgs, { message: aiMsg, from: "Me" }]);
-    //setAiMsgs((prevMsgs) => [...prevMsgs, { message: aiResponse, from: "AI" }]);
+      .catch((error) => console.error(error))
+      .finally(() => {
+        setAiLoading(false); // Deactivate loading indicator after response
+      });
+
     setAiMsg("");
   };
 
@@ -272,7 +282,11 @@ export default function App() {
             value={aiMsg}
             onChange={(e) => setAiMsg(e.target.value)}
           />
-          <button onClick={sendAiMsg}>Send to AI</button>
+          {aiLoading ? (
+            <button disabled>Sending...</button> // Disable button when loading
+          ) : (
+            <button onClick={sendAiMsg}>Send to AI</button>
+          )}
         </div>
       </div>
     </div>
