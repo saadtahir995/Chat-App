@@ -6,14 +6,11 @@ const socket = io(process.env.NODE_ENV === 'production'
   ? 'https://chat-app-ivory-omega.vercel.app'
   : 'http://localhost:3000',
   {
-    transports: ['websocket'],
+    transports: ['polling', 'websocket'],
     withCredentials: true,
-    path: '/socket.io/',
-    reconnection: true,
-    reconnectionAttempts: 5,
     reconnectionDelay: 1000,
-    autoConnect: true,
-    forceNew: true
+    reconnectionDelayMax: 5000,
+    reconnectionAttempts: 5
   }
 );
 

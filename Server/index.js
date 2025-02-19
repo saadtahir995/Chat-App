@@ -4,17 +4,14 @@ const cors = require('cors');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server, {
-    path: '/socket.io/',
     cors: {
-        origin: '*',  // Allow all origins in development
-        methods: ['GET', 'POST', 'PUT', 'DELETE'],
-        allowedHeaders: ['Content-Type', 'Authorization'],
+        origin: ['https://chat-chi-ashen-44.vercel.app', 'https://chat-app-ivory-omega.vercel.app'],
+        methods: ['GET', 'POST'],
         credentials: true
     },
-    transports: ['websocket', 'polling'],
-    allowEIO3: true,  // Allow Engine.IO version 3
-    pingTimeout: 60000,  // Increase ping timeout
-    upgradeTimeout: 30000  // Increase upgrade timeout
+    maxHttpBufferSize: 1e8,
+    pingTimeout: 60000,
+    transports: ['polling', 'websocket']
 });
 
 app.use(express.json());
@@ -83,6 +80,10 @@ io.on('connection', (socket) => {
         io.emit('response', id + ' is disconnected', 'Alert')
     })
 })
+
+app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+});
 
 const PORT = process.env.PORT || 3000;
 if (process.env.NODE_ENV !== 'production') {
