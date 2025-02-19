@@ -6,26 +6,29 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server, {
     cors: {
         origin: ['https://chat-chi-ashen-44.vercel.app', 'https://chat-app-ivory-omega.vercel.app'],
-        methods: ['GET', 'POST'],
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true
     },
-    maxHttpBufferSize: 1e8,
-    pingTimeout: 60000,
+    allowEIO3: true,
     transports: ['polling', 'websocket']
 });
+
+// Apply CORS middleware before other middleware
+app.use(cors({
+    origin: ['https://chat-chi-ashen-44.vercel.app', 'https://chat-app-ivory-omega.vercel.app'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    optionsSuccessStatus: 200
+}));
+
+// Add OPTIONS handling for preflight requests
+app.options('*', cors());
 
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors({
-    origin: [
-        'https://chat-chi-ashen-44.vercel.app',
-        'https://chat-app-ivory-omega.vercel.app'
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
-}));
 
 const ChatRoute = require('./Routes/chatapi.js')
 app.use('/api/route', ChatRoute)

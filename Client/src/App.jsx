@@ -3,14 +3,17 @@ import io from "socket.io-client";
 import "./style.css";
 
 const socket = io(process.env.NODE_ENV === 'production' 
-  ? 'wss://chat-app-ivory-omega.vercel.app'
+  ? 'https://chat-app-ivory-omega.vercel.app'
   : 'http://localhost:3000',
   {
     transports: ['polling', 'websocket'],
     withCredentials: true,
     reconnectionDelay: 1000,
     reconnectionDelayMax: 5000,
-    reconnectionAttempts: 5
+    reconnectionAttempts: 5,
+    autoConnect: true,
+    forceNew: true,
+    path: '/socket.io/'
   }
 );
 
