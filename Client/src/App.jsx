@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import "./style.css";
 
-const socket = io("http://localhost:3000");
+const socket = io(process.env.NODE_ENV === 'production' 
+  ? 'wss://your-vercel-domain.vercel.app'  // Production URL with wss://
+  : 'ws://localhost:3000',                  // Development URL with ws://
+  {
+    transports: ['websocket']
+  }
+);
 
 export default function App() {
   const [msg, setMsg] = useState("");
