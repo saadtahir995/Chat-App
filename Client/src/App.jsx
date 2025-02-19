@@ -3,10 +3,11 @@ import io from "socket.io-client";
 import "./style.css";
 
 const socket = io(process.env.NODE_ENV === 'production' 
-  ? 'wss://chat-app-ivory-omega.vercel.app'  // Production URL with wss://
-  : 'ws://localhost:3000',                  // Development URL with ws://
+  ? 'https://your-server-url.vercel.app'  // Your server deployment URL
+  : 'http://localhost:3000',
   {
-    transports: ['websocket']
+    transports: ['websocket', 'polling'],
+    withCredentials: true
   }
 );
 
