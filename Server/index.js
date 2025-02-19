@@ -1,6 +1,6 @@
 const io= require('socket.io')(3000,{
     cors:{
-    origin:['http://localhost:5173','https://chat-chi-ashen-44.vercel.app/'],
+    origin:['https://chat-chi-ashen-44.vercel.app'],
     },
 })
 const express = require('express');
@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors({
-    origin: ['http://localhost:5173','https://chat-chi-ashen-44.vercel.app/'],  // Allow requests from frontend server
+    origin: ['https://chat-chi-ashen-44.vercel.app'],  // Allow requests from frontend server
     methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Allow methods
     allowedHeaders: ['Content-Type', 'Authorization'],  // Allow headers
 }));
