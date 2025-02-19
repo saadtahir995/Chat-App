@@ -101,6 +101,8 @@ export default function App() {
 
   const HandleLeave = () => {
     setIsjoined(false);
+    setRoomname("")
+    setShowstatus(false)
     socket.emit("room_leave", room, name);
     setMsgs([{}]);
     setRoom("");
