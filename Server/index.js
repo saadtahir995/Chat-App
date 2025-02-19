@@ -4,16 +4,17 @@ const cors = require('cors');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server, {
+    path: '/socket.io/',
     cors: {
-        origin: [
-            'https://chat-chi-ashen-44.vercel.app',
-            'https://chat-app-ivory-omega.vercel.app'
-        ],
+        origin: '*',  // Allow all origins in development
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization'],
-        credentials: true,
-        transports: ['websocket', 'polling']
-    }
+        credentials: true
+    },
+    transports: ['websocket', 'polling'],
+    allowEIO3: true,  // Allow Engine.IO version 3
+    pingTimeout: 60000,  // Increase ping timeout
+    upgradeTimeout: 30000  // Increase upgrade timeout
 });
 
 app.use(express.json());

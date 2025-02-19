@@ -3,14 +3,32 @@ import io from "socket.io-client";
 import "./style.css";
 
 const socket = io(process.env.NODE_ENV === 'production' 
-  ? 'https://chat-app-ivory-omega.vercel.app'  // Make sure this matches your server URL
+  ? 'https://chat-app-ivory-omega.vercel.app'
   : 'http://localhost:3000',
   {
-    transports: ['websocket', 'polling'],
+    transports: ['websocket'],
     withCredentials: true,
-    path: '/socket.io'  // Add explicit path
+    path: '/socket.io/',
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 1000,
+    autoConnect: true,
+    forceNew: true
   }
 );
+
+// Add connection error handling
+socket.on('connect_error', (error) => {
+  console.error('Connection Error:', error);
+});
+
+socket.on('connect_timeout', () => {
+  console.error('Connection Timeout');
+});
+
+socket.on('reconnect', (attemptNumber) => {
+  console.log('Reconnected on attempt:', attemptNumber);
+});
 
 export default function App() {
   const [msg, setMsg] = useState("");
