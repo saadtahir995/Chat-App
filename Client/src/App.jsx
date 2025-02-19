@@ -2,33 +2,7 @@ import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import "./style.css";
 
-const socket = io(process.env.NODE_ENV === 'production' 
-  ? 'https://chat-app-ivory-omega.vercel.app'
-  : 'http://localhost:3000',
-  {
-    transports: ['polling', 'websocket'],
-    withCredentials: true,
-    reconnectionDelay: 1000,
-    reconnectionDelayMax: 5000,
-    reconnectionAttempts: 5,
-    autoConnect: true,
-    forceNew: true,
-    path: '/socket.io/'
-  }
-);
-
-// Add connection error handling
-socket.on('connect_error', (error) => {
-  console.error('Connection Error:', error);
-});
-
-socket.on('connect_timeout', () => {
-  console.error('Connection Timeout');
-});
-
-socket.on('reconnect', (attemptNumber) => {
-  console.log('Reconnected on attempt:', attemptNumber);
-});
+const socket = io("http://localhost:3000");
 
 export default function App() {
   const [msg, setMsg] = useState("");
@@ -57,7 +31,7 @@ export default function App() {
       { message: aiMsg, from: "Me" },
     ]);
     // Replace this with your actual AI endpoint logic
-    fetch(`https://chat-app-ivory-omega.vercel.app/api/route/chat`, {
+    fetch(`http://localhost:5174/api/route/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
