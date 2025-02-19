@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import "./style.css";
 
 const socket = io(process.env.NODE_ENV === 'production' 
-  ? 'wss://your-vercel-domain.vercel.app'  // Production URL with wss://
+  ? 'wss://chat-app-ivory-omega.vercel.app'  // Production URL with wss://
   : 'ws://localhost:3000',                  // Development URL with ws://
   {
     transports: ['websocket']
@@ -37,7 +37,7 @@ export default function App() {
       { message: aiMsg, from: "Me" },
     ]);
     // Replace this with your actual AI endpoint logic
-    fetch(`http://localhost:5174/api/route/chat`, {
+    fetch(`https://chat-app-ivory-omega.vercel.app/api/route/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
