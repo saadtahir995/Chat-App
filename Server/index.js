@@ -8,23 +8,26 @@ const app = express();
 const server = http.createServer(app);  // Create HTTP server
 const io = new Server(server, {
     cors: {
-        origin: "https://chat-chi-ashen-44.vercel.app", // Allow frontend
+        origin: "*",  // Allow all origins (for debugging only, restrict later)
         methods: ["GET", "POST"],
         credentials: true
     }
 });
 
 
+
 // Middleware
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors({
-    origin: "https://chat-chi-ashen-44.vercel.app",  // Allow frontend origin
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+const corsOptions = {
+    origin: "https://chat-chi-ashen-44.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
-}));
+};
+app.use(cors(corsOptions));
+
 
 
 // Routes
