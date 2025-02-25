@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import "./style.css";
 
-const socket = io("wss://chat-app-production-4573.up.railway.app", {
-  transports: ["websocket"],  // Force WebSocket transport
+const socket = io("https://chat-app-production-4573.up.railway.app", {
+  transports: ["websocket", "polling"],
 });
+
 
 export default function App() {
   const [msg, setMsg] = useState("");
