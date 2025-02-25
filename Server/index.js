@@ -35,7 +35,7 @@ const ChatRoute = require('./Routes/chatapi.js');
 app.use('/api/route', ChatRoute);
 
 // Use Railway's assigned port or fallback to 5174 locally
-const PORT = process.env.PORT || 5174;
+const PORT = 5174;
 server.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });
