@@ -8,7 +8,7 @@ const app = express();
 const server = http.createServer(app);  // Create HTTP server
 const io = new Server(server, {
     cors: {
-        origin: ['http://localhost:5173', 'https://chat-chi-ashen-44.vercel.app/'],
+        origin: "*",  // Allow all origins
     },
 });
 
@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://chat-chi-ashen-44.vercel.app/'],
+    origin: "*",
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
