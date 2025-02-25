@@ -8,19 +8,24 @@ const app = express();
 const server = http.createServer(app);  // Create HTTP server
 const io = new Server(server, {
     cors: {
-        origin: "*",  // Allow all origins
-    },
+        origin: "https://chat-chi-ashen-44.vercel.app", // Allow frontend
+        methods: ["GET", "POST"],
+        credentials: true
+    }
 });
+
 
 // Middleware
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors({
-    origin: "*",
+    origin: "https://chat-chi-ashen-44.vercel.app",  // Allow frontend origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 }));
+
 
 // Routes
 const ChatRoute = require('./Routes/chatapi.js');
