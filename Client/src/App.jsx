@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import "./style.css";
 
-const socket = io("http://localhost:5174");
+const socket = io("wss://chat-app-production-4573.up.railway.app");
 
 export default function App() {
   const [msg, setMsg] = useState("");
@@ -31,7 +31,7 @@ export default function App() {
       { message: aiMsg, from: "Me" },
     ]);
     // Replace this with your actual AI endpoint logic
-    fetch(`http://localhost:5174/api/route/chat`, {
+    fetch(`https://chat-app-production-4573.up.railway.app/api/route/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
