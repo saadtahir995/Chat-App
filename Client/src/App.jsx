@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import "./style.css";
 
-const socket = io("https://chat-app-production-4573.up.railway.app", {
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const socket = io(BACKEND_URL, {
   transports: ["websocket", "polling"],
 });
 
@@ -34,7 +35,7 @@ export default function App() {
       { message: aiMsg, from: "Me" },
     ]);
     // Replace this with your actual AI endpoint logic
-    fetch(`https://chat-app-production-4573.up.railway.app/api/route/chat`, {
+    fetch(`${BACKEND_URL}/api/route/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
